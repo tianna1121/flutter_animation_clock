@@ -10,14 +10,40 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  Animation animation;
+  AnimationController animationController;
+
   _HomeScreenState();
   _currentTime() {
     return " ${DateTime.now().hour} : ${DateTime.now().minute}";
   }
 
   @override
+  void initState() {
+    super.initState();
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animationController.addListener(() {
+      if (animationController.isCompleted) {
+        animationController.reverse();
+      } else if (animationController.isDismissed) {
+        animationController.forward();
+      }
+      // * run 60 times in a minute.
+      setState(() {});
+    });
+    animationController.forward(); // * start the animation.
+  }
+
+  @override
   Widget build(BuildContext context) {
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    animation = Tween(begin: -0.5, end: 0.5)
+        .animate(animation); // * updating the animation object
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -53,11 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Container(
-                child: Image.asset(
-                  "assets/images/pandulum.png",
-                  width: 100,
-                  height: 250,
+              Transform(
+                alignment: FractionalOffset(0.5, 0.1),
+                transform: Matrix4.rotationZ(animation.value),
+                child: Container(
+                  child: Image.asset(
+                    "assets/images/pandulum.png",
+                    width: 100,
+                    height: 250,
+                  ),
                 ),
               ),
             ],
