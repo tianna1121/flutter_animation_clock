@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 void main() => runApp(MaterialApp(
       title: "My Clock",
       home: HomeScreen(),
+      theme: ThemeData(fontFamily: 'Berlin'),
     ));
 
 class HomeScreen extends StatefulWidget {
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
         title: Center(
           child: Text(
             "Clock",
+            style: TextStyle(fontSize: 32.0),
           ),
         ),
         backgroundColor: Colors.deepOrange,
@@ -67,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen>
                 color: Colors.brown.shade900,
                 child: Container(
                   width: 320,
-                  height: 320,
+                  height: 280,
                   child: Center(
                     child: Text(
                       _currentTime(),
